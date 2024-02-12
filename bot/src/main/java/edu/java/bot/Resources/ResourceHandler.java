@@ -1,4 +1,4 @@
-package edu.java.bot;
+package edu.java.bot.Resources;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

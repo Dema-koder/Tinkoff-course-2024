@@ -1,4 +1,4 @@
-package edu.java.bot;
+package edu.java.bot.Resources;
 
 import java.net.MalformedURLException;
 import java.net.URL;

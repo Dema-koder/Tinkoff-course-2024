@@ -28,6 +28,6 @@ public class BotApplication {
         String token = getToken();
 
         Bot bot = new Bot(token);
-        bot.update();
+        bot.evaluate();
     }
 }
