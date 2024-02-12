@@ -18,7 +18,12 @@ public class TrackCommand extends CommandHandler {
         update = bot.getLastUpdate();
         try {
             Resource resource = new Resource(update.message().text());
-            bot.execute(new SendMessage(update.message().chat().id(), "Ссылка начала отслеживаться"));
+            boolean check = bot.addLinkToTrack(update.message().chat().username(), resource);
+            if (check) {
+                bot.execute(new SendMessage(update.message().chat().id(), "Ссылка начала отслеживаться"));
+            } else {
+                bot.execute(new SendMessage(update.message().chat().id(), "Данная ссылка уже отслеживается"));
+            }
         } catch (MalformedURLException e) {
             bot.execute(new SendMessage(update.message().chat().id(), "Ссылка некорректна"));
         }

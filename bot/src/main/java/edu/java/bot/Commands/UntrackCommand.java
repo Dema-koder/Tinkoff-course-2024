@@ -18,7 +18,12 @@ public class UntrackCommand extends CommandHandler{
         update = bot.getLastUpdate();
         try {
             Resource resource = new Resource(update.message().text());
-            bot.execute(new SendMessage(update.message().chat().id(), "Ссылка удалилась"));
+            boolean check = bot.removeLinkFromTrack(update.message().chat().username(), resource);
+            if (check) {
+                bot.execute(new SendMessage(update.message().chat().id(), "Ссылка удалилась"));
+            } else {
+                bot.execute(new SendMessage(update.message().chat().id(), "Ссылка до этого не отслеживалась"));
+            }
         } catch (MalformedURLException e) {
             bot.execute(new SendMessage(update.message().chat().id(), "Ссылка некорректна"));
         }

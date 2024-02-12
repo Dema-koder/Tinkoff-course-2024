@@ -19,7 +19,7 @@ public class BotApplication {
         this.applicationConfig = applicationConfig;
     }
 
-    public static String getToken() {
+    private static String getToken() {
         return applicationConfig.telegramToken();
     }
 
