@@ -1,13 +1,12 @@
 package edu.java.bot.Commands;
 
-import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.Bot;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChainOfCommands {
-    private List<String>allCommands;
+    private List<String> allCommands;
     private StartCommand startCommand;
     private HelpCommand helpCommand;
     private TrackCommand trackCommand;

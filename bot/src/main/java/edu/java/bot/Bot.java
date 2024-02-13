@@ -16,21 +16,41 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Bot {
     private TelegramBot bot;
     private ChainOfCommands chainOfCommands;
     private int lastProceedUpdateId = 0;
-    private Map<String, Set<Resource>>dataBase;
+    private Map<String, Set<Resource>> dataBase;
 
-    public Map<String, Set<Resource>> getBD() {
-        return dataBase;
+    public void setDataBase(Map<String, Set<Resource>> dataBase) {
+        this.dataBase = dataBase;
     }
 
     public Bot(@NotEmpty String token) {
         bot = new TelegramBot(token);
         chainOfCommands = new ChainOfCommands();
         dataBase = new HashMap<>();
+    }
+
+    public Long getIdOfUpdate(Update update) {
+        return update.message().chat().id();
+    }
+
+    public String getUsernameOfUpdate(Update update) {
+        return update.message().chat().username();
+    }
+
+    public String getMessageOfUpdate(Update update) {
+        return update.message().text();
+    }
+
+    public String getListOfLinks(String login) {
+        String links = dataBase.get(login).stream()
+            .map(Object::toString)
+            .collect(Collectors.joining("\n"));
+        return links;
     }
 
     public boolean addUserToDB(String login) {
@@ -74,7 +94,6 @@ public class Bot {
                 updates = updatesResponse.updates();
             }
             String request = updates.getLast().message().text();
-            lastProceedUpdateId = updates.getLast().updateId();
             lastProceedUpdateId = updates.getLast().updateId();
             if (chainOfCommands.isBotCommand(request)) {
                 chainOfCommands.startChain(updates.getLast(), this);
