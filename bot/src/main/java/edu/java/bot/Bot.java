@@ -1,10 +1,12 @@
 package edu.java.bot;
 
 import com.pengrad.telegrambot.TelegramBot;
+import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.GetUpdates;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.request.SetMyCommands;
 import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.GetUpdatesResponse;
 import edu.java.bot.Commands.ChainOfCommands;
@@ -17,12 +19,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Bot {
     private TelegramBot bot;
     private ChainOfCommands chainOfCommands;
     private int lastProceedUpdateId = 0;
     private Map<String, Set<Resource>> dataBase;
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public void setDataBase(Map<String, Set<Resource>> dataBase) {
         this.dataBase = dataBase;
@@ -32,6 +37,16 @@ public class Bot {
         bot = new TelegramBot(token);
         chainOfCommands = new ChainOfCommands();
         dataBase = new HashMap<>();
+
+        try {
+            bot.execute(new SetMyCommands(new BotCommand("/track", "начать отслеживание ссылки"),
+                new BotCommand("/start", "зарегистрировать пользователя"),
+                new BotCommand("/help", "вывести окно с командами"),
+                new BotCommand("/untrack", "прекратить отслеживание ссылки"),
+                new BotCommand("/list", "показать список отслеживаемых ссылок")));
+        } catch (Exception e) {
+            LOGGER.error("Ошибка при добавлении меню");
+        }
     }
 
     public Long getIdOfUpdate(Update update) {
