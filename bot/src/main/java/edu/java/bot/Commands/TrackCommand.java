@@ -15,12 +15,12 @@ public class TrackCommand extends CommandHandler {
     @Override
     protected void processRequest(Update update, Bot bot) {
         bot.execute(new SendMessage(update.message().chat().id(), "Отправьте ссылку для отслеживания"));
-        update = bot.getLastUpdate();
+        Update lastUpdate = bot.getLastUpdate();
         try {
-            Resource resource = new Resource(update.message().text());
-            bot.execute(new SendMessage(update.message().chat().id(), "Ссылка начала отслеживаться"));
+            Resource resource = new Resource(lastUpdate.message().text());
+            bot.execute(new SendMessage(lastUpdate.message().chat().id(), "Ссылка начала отслеживаться"));
         } catch (MalformedURLException e) {
-            bot.execute(new SendMessage(update.message().chat().id(), "Ссылка некорректна"));
+            bot.execute(new SendMessage(lastUpdate.message().chat().id(), "Ссылка некорректна"));
         }
     }
 }

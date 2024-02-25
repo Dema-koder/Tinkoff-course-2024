@@ -4,7 +4,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.Bot;
 
-public class StartCommand extends CommandHandler{
+public class StartCommand extends CommandHandler {
     @Override
     protected boolean canHandle(String request) {
         return request.equals("/start");

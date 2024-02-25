@@ -1,7 +1,6 @@
 package edu.java.bot;
 
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.GetUpdates;

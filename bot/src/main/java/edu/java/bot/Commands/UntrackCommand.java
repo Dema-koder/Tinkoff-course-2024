@@ -6,7 +6,7 @@ import edu.java.bot.Bot;
 import edu.java.bot.Resources.Resource;
 import java.net.MalformedURLException;
 
-public class UntrackCommand extends CommandHandler{
+public class UntrackCommand extends CommandHandler {
     @Override
     protected boolean canHandle(String request) {
         return request.equals("/untrack");
@@ -15,12 +15,12 @@ public class UntrackCommand extends CommandHandler{
     @Override
     protected void processRequest(Update update, Bot bot) {
         bot.execute(new SendMessage(update.message().chat().id(), "Отправьте ссылку для удаления"));
-        update = bot.getLastUpdate();
+        Update lastUpdate = bot.getLastUpdate();
         try {
-            Resource resource = new Resource(update.message().text());
-            bot.execute(new SendMessage(update.message().chat().id(), "Ссылка удалилась"));
+            Resource resource = new Resource(lastUpdate.message().text());
+            bot.execute(new SendMessage(lastUpdate.message().chat().id(), "Ссылка удалилась"));
         } catch (MalformedURLException e) {
-            bot.execute(new SendMessage(update.message().chat().id(), "Ссылка некорректна"));
+            bot.execute(new SendMessage(lastUpdate.message().chat().id(), "Ссылка некорректна"));
         }
     }
 }

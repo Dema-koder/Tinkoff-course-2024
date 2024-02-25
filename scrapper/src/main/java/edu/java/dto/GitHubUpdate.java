@@ -1,10 +1,10 @@
 package edu.java.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import java.time.OffsetDateTime;
 import java.util.Map;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
