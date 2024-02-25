@@ -1,5 +1,6 @@
 package edu.java.client;
 
+import edu.java.client.exception.ApiErrorException;
 import edu.java.dto.GitHubUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,10 @@ public class GitHubClient {
             .retrieve()
             .onStatus(
                 status -> status.is4xxClientError() || status.is5xxServerError(),
-                clientResponse -> Mono.error(new Exception("exception"))
+                clientResponse -> Mono.error(new ApiErrorException(
+                    "Github API error",
+                    clientResponse.statusCode().value()
+                ))
             )
             .bodyToMono(GitHubUpdate.class);
     }
