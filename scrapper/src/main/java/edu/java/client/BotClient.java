@@ -12,10 +12,10 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 public class BotClient {
-    private final WebClient botClient;
+    private final WebClient botWebClient;
 
     public Mono<String> sendUpdate(LinkUpdateRequest linkUpdateRequest) {
-        return botClient.post()
+        return botWebClient.post()
             .uri("/updates")
             .body(BodyInserters.fromValue(linkUpdateRequest))
             .retrieve()

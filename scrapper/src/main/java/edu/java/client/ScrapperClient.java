@@ -16,11 +16,11 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 public class ScrapperClient {
-    private final WebClient webClient;
+    private final WebClient scrapperWebClient;
 
     public Mono<String> addLinkToList(int id) {
         String path = "/tg-chat/" + id;
-        return webClient.post()
+        return scrapperWebClient.post()
             .uri(path)
             .retrieve()
             .onStatus(HttpStatus.BAD_REQUEST::equals, response -> response.bodyToMono(ApiErrorResponse.class)
@@ -30,7 +30,7 @@ public class ScrapperClient {
 
     public Mono<String> deleteChatById(int id) {
         String path = "/tg-chat/" + id;
-        return webClient.post()
+        return scrapperWebClient.post()
             .uri(path)
             .retrieve()
             .onStatus(HttpStatus.BAD_REQUEST::equals, response -> response.bodyToMono(ApiErrorResponse.class)
@@ -39,7 +39,7 @@ public class ScrapperClient {
     }
 
     public Mono<LinkResponse> addLinkToList(int id, AddLinkRequest addLinkRequest) {
-        return webClient.post()
+        return scrapperWebClient.post()
             .uri("links")
             .body(BodyInserters.fromValue(addLinkRequest))
             .header("Tg-Chat-Id", String.valueOf(id))
@@ -50,7 +50,7 @@ public class ScrapperClient {
     }
 
     public Mono<LinkResponse> removeLinkFromList(int id, RemoveLinkRequest removeLinkRequest) {
-        return webClient.method(HttpMethod.DELETE)
+        return scrapperWebClient.method(HttpMethod.DELETE)
             .uri("links")
             .body(BodyInserters.fromValue(removeLinkRequest))
             .header("Tg-Chat-Id", String.valueOf(id))
@@ -61,7 +61,7 @@ public class ScrapperClient {
     }
 
     public Mono<ListLinksResponse> getListOfLinks(long id) {
-        return webClient.get()
+        return scrapperWebClient.get()
             .uri("links")
             .header("Tg-Chat-Id", String.valueOf(id))
             .retrieve()

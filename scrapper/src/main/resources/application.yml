@@ -1,4 +1,6 @@
 app:
+  scrapper: "http://localhost:8080"
+  bot: "http://localhost:8090"
   github: "https://api.github.com"
   stackoverflow: "https://api.stackexchange.com/2.3"
   scheduler:
