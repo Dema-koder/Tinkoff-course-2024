@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ScrapperController {
 
+    private static final String STRING = "string";
     private static final String WRONG_PARAMETERS = "Некорректные параметры запроса";
     private static final String CHAT_DOES_NOT_EXIST = "Чат не существует";
 
@@ -31,7 +32,7 @@ public class ScrapperController {
         if (tgChatId < 0) {
             throw new WrongParametersException(WRONG_PARAMETERS);
         }
-        LinkResponse linkResponse = new LinkResponse(0, "string");
+        LinkResponse linkResponse = new LinkResponse(0, STRING);
         return linkResponse;
     }
 
@@ -44,7 +45,6 @@ public class ScrapperController {
         if (id < 0) {
             throw new WrongParametersException(WRONG_PARAMETERS);
         }
-        log.info("Чат удален");
         return "Чат удален";
     }
 
@@ -62,7 +62,7 @@ public class ScrapperController {
     @PostMapping("/links")
     public LinkResponse addLinkToList(int tgChatId, @RequestBody AddLinkRequest addLinkRequest)
         throws WrongParametersException {
-        LinkResponse linkResponse = new LinkResponse(0, "string");
+        LinkResponse linkResponse = new LinkResponse(0, STRING);
         if (tgChatId < 0 || addLinkRequest == null) {
             throw new WrongParametersException(WRONG_PARAMETERS);
         }

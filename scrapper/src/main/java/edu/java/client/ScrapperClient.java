@@ -16,10 +16,13 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 public class ScrapperClient {
+    private static final String CHATS = "/tg-chat/";
+    private static final String LINKS = "links";
+    private static final String HEAD = "Tg-Chat-Id";
     private final WebClient scrapperWebClient;
 
-    public Mono<String> addLinkToList(int id) {
-        String path = "/tg-chat/" + id;
+    public Mono<String> userRegistration(int id) {
+        String path = CHATS + id;
         return scrapperWebClient.post()
             .uri(path)
             .retrieve()
@@ -29,7 +32,7 @@ public class ScrapperClient {
     }
 
     public Mono<String> deleteChatById(int id) {
-        String path = "/tg-chat/" + id;
+        String path = CHATS + id;
         return scrapperWebClient.post()
             .uri(path)
             .retrieve()
@@ -40,9 +43,9 @@ public class ScrapperClient {
 
     public Mono<LinkResponse> addLinkToList(int id, AddLinkRequest addLinkRequest) {
         return scrapperWebClient.post()
-            .uri("links")
+            .uri(LINKS)
             .body(BodyInserters.fromValue(addLinkRequest))
-            .header("Tg-Chat-Id", String.valueOf(id))
+            .header(HEAD, String.valueOf(id))
             .retrieve()
             .onStatus(HttpStatus.BAD_REQUEST::equals, response -> response.bodyToMono(ApiErrorResponse.class)
                 .flatMap(errorResponse -> Mono.error(new RuntimeException(errorResponse.getExceptionMessage()))))
@@ -51,9 +54,9 @@ public class ScrapperClient {
 
     public Mono<LinkResponse> removeLinkFromList(int id, RemoveLinkRequest removeLinkRequest) {
         return scrapperWebClient.method(HttpMethod.DELETE)
-            .uri("links")
+            .uri(LINKS)
             .body(BodyInserters.fromValue(removeLinkRequest))
-            .header("Tg-Chat-Id", String.valueOf(id))
+            .header(HEAD, String.valueOf(id))
             .retrieve()
             .onStatus(HttpStatus.BAD_REQUEST::equals, response -> response.bodyToMono(ApiErrorResponse.class)
                 .flatMap(errorResponse -> Mono.error(new RuntimeException(errorResponse.getExceptionMessage()))))
@@ -62,8 +65,8 @@ public class ScrapperClient {
 
     public Mono<ListLinksResponse> getListOfLinks(long id) {
         return scrapperWebClient.get()
-            .uri("links")
-            .header("Tg-Chat-Id", String.valueOf(id))
+            .uri(LINKS)
+            .header(HEAD, String.valueOf(id))
             .retrieve()
             .onStatus(HttpStatus.BAD_REQUEST::equals, response -> response.bodyToMono(ApiErrorResponse.class)
                 .flatMap(errorResponse -> Mono.error(new RuntimeException(errorResponse.getExceptionMessage()))))
