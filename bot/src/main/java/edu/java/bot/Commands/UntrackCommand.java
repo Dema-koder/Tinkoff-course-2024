@@ -29,6 +29,13 @@ public class UntrackCommand extends CommandHandler {
             }
         } catch (MalformedURLException e) {
             bot.execute(new SendMessage(id, "Ссылка некорректна"));
+        bot.execute(new SendMessage(update.message().chat().id(), "Отправьте ссылку для удаления"));
+        Update lastUpdate = bot.getLastUpdate();
+        try {
+            Resource resource = new Resource(lastUpdate.message().text());
+            bot.execute(new SendMessage(lastUpdate.message().chat().id(), "Ссылка удалилась"));
+        } catch (MalformedURLException e) {
+            bot.execute(new SendMessage(lastUpdate.message().chat().id(), "Ссылка некорректна"));
         }
     }
 }
