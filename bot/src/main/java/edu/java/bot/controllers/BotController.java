@@ -1,7 +1,7 @@
-package edu.java.controllers;
+package edu.java.bot.controllers;
 
-import edu.java.dto.LinkUpdateRequest;
-import edu.java.exceptions.WrongParametersException;
+import edu.java.bot.dtos.LinkUpdateRequest;
+import edu.java.bot.exceptions.WrongParametersException;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

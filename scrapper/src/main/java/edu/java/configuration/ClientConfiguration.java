@@ -10,13 +10,6 @@ public class ClientConfiguration {
     private static final String CONTENT_TYPE = "Content-Type";
 
     @Bean
-    public WebClient scrapperWebClient(ApplicationConfig applicationConfig) {
-        return WebClient.builder()
-            .baseUrl(applicationConfig.scrapper())
-            .build();
-    }
-
-    @Bean
     public WebClient botWebClient(ApplicationConfig applicationConfig) {
         return WebClient.builder()
             .baseUrl(applicationConfig.bot())

@@ -1,10 +1,10 @@
-package edu.java.client;
+package edu.java.bot.clients;
 
-import edu.java.dto.AddLinkRequest;
-import edu.java.dto.ApiErrorResponse;
-import edu.java.dto.LinkResponse;
-import edu.java.dto.ListLinksResponse;
-import edu.java.dto.RemoveLinkRequest;
+import edu.java.bot.dtos.AddLinkRequest;
+import edu.java.bot.dtos.ApiErrorResponse;
+import edu.java.bot.dtos.LinkResponse;
+import edu.java.bot.dtos.ListLinksResponse;
+import edu.java.bot.dtos.RemoveLinkRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
