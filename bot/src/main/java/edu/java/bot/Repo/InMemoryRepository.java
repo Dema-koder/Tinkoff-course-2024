@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class InMemoryRepository implements Repository{
+public class InMemoryRepository implements Repository {
     private Map<String, Set<Resource>> dataBase;
 
     public InMemoryRepository() {
@@ -36,7 +36,7 @@ public class InMemoryRepository implements Repository{
     public boolean removeLink(String login, Resource resource) {
         boolean check = false;
         Resource cur = new Resource();
-        for (var res: dataBase.get(login)) {
+        for (var res : dataBase.get(login)) {
             if (res.toString().equals(resource.toString())) {
                 check = true;
                 cur = res;
