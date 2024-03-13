@@ -1,0 +1,17 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.21.xsd">
+
+    <changeSet id="createChatDb" author="dema-koder">
+        <sqlFile path="createChatDb.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="createLinksDb" author="dema-koder">
+        <sqlFile path="createLinksDb.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="createRelationshipChatLink" author="dema-koder">
+        <sqlFile path="createRelationshipChatLink.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+</databaseChangeLog>
