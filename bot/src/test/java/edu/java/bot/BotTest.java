@@ -25,19 +25,6 @@ class BotTest {
     }
 
     @Test
-    void testGetListOfLinks() throws MalformedURLException {
-        Map<String, Set<Resource>> dataBase = new HashMap<>();
-        Set<Resource> links = new HashSet<>();
-        links.add(new Resource("https://example.com"));
-        dataBase.put("login", links);
-        bot.setDataBase(dataBase);
-
-        String result = bot.getListOfLinks("login");
-
-        assert result.equals("https://example.com");
-    }
-
-    @Test
     void testAddLinkToTrack() {
         bot.addUserToDB("user1");
         Resource resource = new Resource();

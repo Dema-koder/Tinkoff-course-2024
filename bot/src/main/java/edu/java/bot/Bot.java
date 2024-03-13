@@ -10,6 +10,7 @@ import com.pengrad.telegrambot.request.SetMyCommands;
 import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.GetUpdatesResponse;
 import edu.java.bot.Commands.ChainOfCommands;
+import edu.java.bot.Repo.InMemoryRepository;
 import edu.java.bot.Resources.Resource;
 import jakarta.validation.constraints.NotEmpty;
 import java.util.ArrayList;
@@ -26,17 +27,13 @@ public class Bot {
     private TelegramBot bot;
     private ChainOfCommands chainOfCommands;
     private int lastProceedUpdateId = 0;
-    private Map<String, Set<Resource>> dataBase;
+    private InMemoryRepository inMemoryRepository;
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public void setDataBase(Map<String, Set<Resource>> dataBase) {
-        this.dataBase = dataBase;
-    }
-
     public Bot(@NotEmpty String token) {
+        inMemoryRepository = new InMemoryRepository();
         bot = new TelegramBot(token);
         chainOfCommands = new ChainOfCommands();
-        dataBase = new HashMap<>();
 
         try {
             bot.execute(new SetMyCommands(new BotCommand("/track", "начать отслеживание ссылки"),
@@ -62,42 +59,19 @@ public class Bot {
     }
 
     public String getListOfLinks(String login) {
-        String links = dataBase.get(login).stream()
-            .map(Object::toString)
-            .collect(Collectors.joining("\n"));
-        return links;
+        return inMemoryRepository.getListOfLinks(login);
     }
 
     public boolean addUserToDB(String login) {
-        if (dataBase.containsKey(login)) {
-            return false;
-        }
-        dataBase.put(login, new HashSet<>());
-        return true;
+        return inMemoryRepository.addUser(login);
     }
 
     public boolean addLinkToTrack(String login, Resource resource) {
-        if (dataBase.get(login).contains(resource)) {
-            return false;
-        }
-        dataBase.get(login).add(resource);
-        return true;
+        return inMemoryRepository.addLink(login, resource);
     }
 
     public boolean removeLinkFromTrack(String login, Resource resource) {
-        boolean check = false;
-        Resource cur = new Resource();
-        for (var res: dataBase.get(login)) {
-            if (res.toString().equals(resource.toString())) {
-                check = true;
-                cur = res;
-            }
-        }
-        if (check) {
-            dataBase.get(login).remove(cur);
-            return true;
-        }
-        return false;
+        return inMemoryRepository.removeLink(login, resource);
     }
 
     public void evaluate() {
