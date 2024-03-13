@@ -74,8 +74,8 @@ public class IntegrationTest {
             .username(POSTGRES.getUsername())
             .password(POSTGRES.getPassword())
             .build());
-        jdbcTemplate.update("INSERT INTO Chat (tg_chat_id) VALUES (?)", 1L);
-        long chatId = jdbcTemplate.queryForObject("SELECT tg_chat_id FROM Chat WHERE chat_id = (?)", Long.class, 1L);
+        jdbcTemplate.update("INSERT INTO chat (tg_chat_id) VALUES (?)", 1L);
+        long chatId = jdbcTemplate.queryForObject("SELECT id FROM chat WHERE tg_chat_id = (?)", Long.class, 1L);
 
         assertThat(1L).isEqualTo(chatId);
     }
