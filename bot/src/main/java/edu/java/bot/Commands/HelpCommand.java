@@ -19,6 +19,5 @@ public class HelpCommand extends CommandHandler {
             + "/untrack -- прекратить отслеживание ссылки\n"
             + "/list -- показать список отслеживаемых ссылок";
         bot.execute(new SendMessage(id, response));
-        bot.execute(new SendMessage(update.message().chat().id(), response));
     }
 }
