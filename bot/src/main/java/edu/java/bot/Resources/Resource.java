@@ -9,4 +9,11 @@ public class Resource {
     public Resource(String url) throws MalformedURLException {
         this.url = new URL(url);
     }
+
+    public Resource() {}
+
+    @Override
+    public String toString() {
+        return this.url.toString();
+    }
 }

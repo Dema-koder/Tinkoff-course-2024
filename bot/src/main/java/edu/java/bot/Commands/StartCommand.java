@@ -12,9 +12,14 @@ public class StartCommand extends CommandHandler {
 
     @Override
     protected void processRequest(Update update, Bot bot) {
-        bot.execute(new SendMessage(update.message().chat().id(), "Придумай себе логин"));
-        Update lastUpdate = bot.getLastUpdate();
-        bot.execute(new SendMessage(lastUpdate.message().chat().id(), "Привет " + lastUpdate.message().text()));
+        String username = bot.getUsernameOfUpdate(update);
+        Long id = bot.getIdOfUpdate(update);
+        boolean check = bot.addUserToDB(username);
+        if (check) {
+            bot.execute(new SendMessage(id, "Привет, "
+                + username + "!"));
+        } else {
+            bot.execute(new SendMessage(id, "Ты уже регистрировался"));
+        }
     }
-
 }
