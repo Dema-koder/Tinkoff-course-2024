@@ -11,9 +11,6 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public record ApplicationConfig(
     @NotEmpty
-    @DefaultValue("http://localhost:8080")
-    String scrapper,
-    @NotEmpty
     @DefaultValue("http://localhost:8090")
     String bot,
     @NotEmpty
