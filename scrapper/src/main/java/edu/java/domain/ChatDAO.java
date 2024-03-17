@@ -31,7 +31,8 @@ public class ChatDAO {
     public Optional<Chat> findById(Long tgChatId) {
         List<Chat> chats = jdbcTemplate.query(
             "SELECT * FROM chat WHERE id = ?",
-            new BeanPropertyRowMapper<>(Chat.class)
+            new BeanPropertyRowMapper<>(Chat.class),
+            tgChatId
         );
         if (chats.isEmpty()) {
             return Optional.empty();
