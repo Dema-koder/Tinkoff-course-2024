@@ -28,7 +28,7 @@ public class LinkDAO {
     @Transactional
     public Optional<Long> getIdByLinkName(String linkName) {
         var list = jdbcTemplate.query("SELECT id FROM link WHERE link_name = ?",
-            new BeanPropertyRowMapper<>(Long.class),
+            (resultSet, row) -> resultSet.getLong("id"),
             linkName
         );
         if (!list.isEmpty()) {
@@ -85,8 +85,8 @@ public class LinkDAO {
 
     @Transactional
     public List<Link> findAllLinksByTgId(Long tgChatId) {
-        return jdbcTemplate.query("SELECT * FROM link WHERE link_id IN"
-                + "(SELECT link_id FROM chat_link WHERE chat_id = (?))",
+        return jdbcTemplate.query("SELECT * FROM link WHERE id IN"
+                + "(SELECT link_id FROM chat_to_link WHERE chat_id = (?))",
             new BeanPropertyRowMapper<>(Link.class), tgChatId
         );
     }
