@@ -1,10 +1,10 @@
 package edu.java.dto.dbDTO;
 
+import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.sql.Timestamp;
 
 @Data
 @AllArgsConstructor

@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class ChatToLink {
-    private Long ChatId;
-    private Long LinkId;
+    private Long chatId;
+    private Long linkId;
 }

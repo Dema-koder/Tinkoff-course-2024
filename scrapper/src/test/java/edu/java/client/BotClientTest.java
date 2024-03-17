@@ -21,7 +21,7 @@ class BotClientTest {
             .willReturn(aResponse()
                 .withStatus(200)));
 
-        StepVerifier.create(botClient.sendUpdate(new LinkUpdateRequest(1, "url", "desc", new int[0])))
+        StepVerifier.create(botClient.sendUpdate(new LinkUpdateRequest(1L, "url", "desc", new int[0])))
             .assertNext(response -> {
                 assertThat(response.equals("Обновление обработано"));
             });
