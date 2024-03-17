@@ -1,14 +1,12 @@
 package edu.java.domain.jooq;
 
-import edu.java.dto.dbDTO.Link;
 import edu.java.domain.LinkRepository;
 import edu.java.domain.jooq.generation2.Tables;
-
+import edu.java.dto.dbDTO.Link;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;

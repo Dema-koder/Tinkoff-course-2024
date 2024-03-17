@@ -1,6 +1,5 @@
 package edu.java.dto.dbDTO;
 
-import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
