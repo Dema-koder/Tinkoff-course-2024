@@ -26,15 +26,21 @@ class LinkDAOTest extends IntegrationTest {
     @Test
     @Rollback
     @Transactional
-    public void allFunctionalityTest() {
+    public void testFindAll() {
         chatDAO.add(1L);
-        linkDAO.addLink(1L,"link", new Timestamp(1L));
-        Optional<Long> linkId = linkDAO.getIdByLinkName("link");
+        chatDAO.add(2L);
+        linkDAO.addLink(1L, "helloworld1", new Timestamp(1L));
+        linkDAO.addLink(1L, "helloworld2", new Timestamp(1L));
+        linkDAO.addLink(2L, "helloworld3", new Timestamp(1L));
 
-        assertThat(linkId.get()).isEqualTo(1L);
+        List<Link> links = linkDAO.findAllLink();
 
-        linkDAO.removeLink(1L, "link");
+        assertThat(3).isEqualTo(links.size());
+        assertThat("helloworld1").isEqualTo(links.getFirst().getLinkName());
+        assertThat("helloworld2").isEqualTo(links.get(1).getLinkName());
+        assertThat("helloworld3").isEqualTo(links.getLast().getLinkName());
 
-        assertThat(linkDAO.getIdByLinkName("link")).isEmpty();
+        chatDAO.remove(1L);
+        chatDAO.remove(2L);
     }
 }

@@ -23,8 +23,8 @@ public class ChatDAO {
 
     @Transactional
     public void remove(Long tgChatId) {
-        jdbcTemplate.update("DELETE FROM chat WHERE tg_chat_id = ?", tgChatId);
         jdbcTemplate.update("DELETE FROM chat_to_link WHERE chat_id = ?", tgChatId);
+        jdbcTemplate.update("DELETE FROM chat WHERE tg_chat_id = ?", tgChatId);
     }
 
     @Transactional
