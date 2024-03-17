@@ -17,12 +17,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function3;
+import org.jooq.Function7;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row3;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -74,9 +74,29 @@ public class Link extends TableImpl<LinkRecord> {
     public final TableField<LinkRecord, String> LINK_NAME = createField(DSL.name("LINK_NAME"), SQLDataType.VARCHAR(1000).nullable(false), this, "");
 
     /**
+     * The column <code>LINK.LAST_CHECK</code>.
+     */
+    public final TableField<LinkRecord, LocalDateTime> LAST_CHECK = createField(DSL.name("LAST_CHECK"), SQLDataType.LOCALDATETIME(6), this, "");
+
+    /**
      * The column <code>LINK.LAST_UPDATE</code>.
      */
     public final TableField<LinkRecord, LocalDateTime> LAST_UPDATE = createField(DSL.name("LAST_UPDATE"), SQLDataType.LOCALDATETIME(6), this, "");
+
+    /**
+     * The column <code>LINK.LAST_COMMIT</code>.
+     */
+    public final TableField<LinkRecord, LocalDateTime> LAST_COMMIT = createField(DSL.name("LAST_COMMIT"), SQLDataType.LOCALDATETIME(6), this, "");
+
+    /**
+     * The column <code>LINK.AMOUNT_ISSUES</code>.
+     */
+    public final TableField<LinkRecord, Integer> AMOUNT_ISSUES = createField(DSL.name("AMOUNT_ISSUES"), SQLDataType.INTEGER.defaultValue(DSL.field(DSL.raw("-1"), SQLDataType.INTEGER)), this, "");
+
+    /**
+     * The column <code>LINK.TYPE</code>.
+     */
+    public final TableField<LinkRecord, String> TYPE = createField(DSL.name("TYPE"), SQLDataType.VARCHAR(31), this, "");
 
     private Link(Name alias, Table<LinkRecord> aliased) {
         this(alias, aliased, null);
@@ -175,19 +195,19 @@ public class Link extends TableImpl<LinkRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row3 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
     @NotNull
-    public Row3<Long, String, LocalDateTime> fieldsRow() {
-        return (Row3) super.fieldsRow();
+    public Row7<Long, String, LocalDateTime, LocalDateTime, LocalDateTime, Integer, String> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function3<? super Long, ? super String, ? super LocalDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function7<? super Long, ? super String, ? super LocalDateTime, ? super LocalDateTime, ? super LocalDateTime, ? super Integer, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -195,7 +215,7 @@ public class Link extends TableImpl<LinkRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function3<? super Long, ? super String, ? super LocalDateTime, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function7<? super Long, ? super String, ? super LocalDateTime, ? super LocalDateTime, ? super LocalDateTime, ? super Integer, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

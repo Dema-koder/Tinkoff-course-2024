@@ -33,25 +33,41 @@ public class Link implements Serializable {
 
     private Long id;
     private String linkName;
+    private LocalDateTime lastCheck;
     private LocalDateTime lastUpdate;
+    private LocalDateTime lastCommit;
+    private Integer amountIssues;
+    private String type;
 
     public Link() {}
 
     public Link(Link value) {
         this.id = value.id;
         this.linkName = value.linkName;
+        this.lastCheck = value.lastCheck;
         this.lastUpdate = value.lastUpdate;
+        this.lastCommit = value.lastCommit;
+        this.amountIssues = value.amountIssues;
+        this.type = value.type;
     }
 
-    @ConstructorProperties({ "id", "linkName", "lastUpdate" })
+    @ConstructorProperties({ "id", "linkName", "lastCheck", "lastUpdate", "lastCommit", "amountIssues", "type" })
     public Link(
         @Nullable Long id,
         @NotNull String linkName,
-        @Nullable LocalDateTime lastUpdate
+        @Nullable LocalDateTime lastCheck,
+        @Nullable LocalDateTime lastUpdate,
+        @Nullable LocalDateTime lastCommit,
+        @Nullable Integer amountIssues,
+        @Nullable String type
     ) {
         this.id = id;
         this.linkName = linkName;
+        this.lastCheck = lastCheck;
         this.lastUpdate = lastUpdate;
+        this.lastCommit = lastCommit;
+        this.amountIssues = amountIssues;
+        this.type = type;
     }
 
     /**
@@ -87,6 +103,21 @@ public class Link implements Serializable {
     }
 
     /**
+     * Getter for <code>LINK.LAST_CHECK</code>.
+     */
+    @Nullable
+    public LocalDateTime getLastCheck() {
+        return this.lastCheck;
+    }
+
+    /**
+     * Setter for <code>LINK.LAST_CHECK</code>.
+     */
+    public void setLastCheck(@Nullable LocalDateTime lastCheck) {
+        this.lastCheck = lastCheck;
+    }
+
+    /**
      * Getter for <code>LINK.LAST_UPDATE</code>.
      */
     @Nullable
@@ -99,6 +130,52 @@ public class Link implements Serializable {
      */
     public void setLastUpdate(@Nullable LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    /**
+     * Getter for <code>LINK.LAST_COMMIT</code>.
+     */
+    @Nullable
+    public LocalDateTime getLastCommit() {
+        return this.lastCommit;
+    }
+
+    /**
+     * Setter for <code>LINK.LAST_COMMIT</code>.
+     */
+    public void setLastCommit(@Nullable LocalDateTime lastCommit) {
+        this.lastCommit = lastCommit;
+    }
+
+    /**
+     * Getter for <code>LINK.AMOUNT_ISSUES</code>.
+     */
+    @Nullable
+    public Integer getAmountIssues() {
+        return this.amountIssues;
+    }
+
+    /**
+     * Setter for <code>LINK.AMOUNT_ISSUES</code>.
+     */
+    public void setAmountIssues(@Nullable Integer amountIssues) {
+        this.amountIssues = amountIssues;
+    }
+
+    /**
+     * Getter for <code>LINK.TYPE</code>.
+     */
+    @Size(max = 31)
+    @Nullable
+    public String getType() {
+        return this.type;
+    }
+
+    /**
+     * Setter for <code>LINK.TYPE</code>.
+     */
+    public void setType(@Nullable String type) {
+        this.type = type;
     }
 
     @Override
@@ -122,11 +199,35 @@ public class Link implements Serializable {
         }
         else if (!this.linkName.equals(other.linkName))
             return false;
+        if (this.lastCheck == null) {
+            if (other.lastCheck != null)
+                return false;
+        }
+        else if (!this.lastCheck.equals(other.lastCheck))
+            return false;
         if (this.lastUpdate == null) {
             if (other.lastUpdate != null)
                 return false;
         }
         else if (!this.lastUpdate.equals(other.lastUpdate))
+            return false;
+        if (this.lastCommit == null) {
+            if (other.lastCommit != null)
+                return false;
+        }
+        else if (!this.lastCommit.equals(other.lastCommit))
+            return false;
+        if (this.amountIssues == null) {
+            if (other.amountIssues != null)
+                return false;
+        }
+        else if (!this.amountIssues.equals(other.amountIssues))
+            return false;
+        if (this.type == null) {
+            if (other.type != null)
+                return false;
+        }
+        else if (!this.type.equals(other.type))
             return false;
         return true;
     }
@@ -137,7 +238,11 @@ public class Link implements Serializable {
         int result = 1;
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.linkName == null) ? 0 : this.linkName.hashCode());
+        result = prime * result + ((this.lastCheck == null) ? 0 : this.lastCheck.hashCode());
         result = prime * result + ((this.lastUpdate == null) ? 0 : this.lastUpdate.hashCode());
+        result = prime * result + ((this.lastCommit == null) ? 0 : this.lastCommit.hashCode());
+        result = prime * result + ((this.amountIssues == null) ? 0 : this.amountIssues.hashCode());
+        result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
         return result;
     }
 
@@ -147,7 +252,11 @@ public class Link implements Serializable {
 
         sb.append(id);
         sb.append(", ").append(linkName);
+        sb.append(", ").append(lastCheck);
         sb.append(", ").append(lastUpdate);
+        sb.append(", ").append(lastCommit);
+        sb.append(", ").append(amountIssues);
+        sb.append(", ").append(type);
 
         sb.append(")");
         return sb.toString();

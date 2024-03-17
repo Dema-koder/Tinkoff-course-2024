@@ -18,8 +18,6 @@ public interface LinkRepository {
 
     Optional<Link> findById(long linkId);
 
-    void updateLastCheck(OffsetDateTime newCheck, String name);
-
     void updateLastUpdate(OffsetDateTime update, String name);
 
     void updateLastCommit(OffsetDateTime commit, String name);
