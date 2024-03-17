@@ -2,7 +2,7 @@ package edu.java.scheduler;
 
 import edu.java.client.BotClient;
 import edu.java.client.GitHubClient;
-import edu.java.domain.LinkDAO;
+import edu.java.domain.jdbc.LinkDAO;
 import edu.java.dto.GitHubUpdate;
 import edu.java.dto.LinkUpdateRequest;
 import edu.java.dto.dbDTO.Link;

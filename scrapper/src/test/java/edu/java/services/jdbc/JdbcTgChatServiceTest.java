@@ -1,7 +1,6 @@
 package edu.java.services.jdbc;
 
-import edu.java.domain.ChatDAO;
-import edu.java.dto.dbDTO.Chat;
+import edu.java.domain.jdbc.ChatDAO;
 import edu.java.exceptions.ChatDoesNotExistException;
 import edu.java.services.TgChatService;
 import org.junit.jupiter.api.Test;

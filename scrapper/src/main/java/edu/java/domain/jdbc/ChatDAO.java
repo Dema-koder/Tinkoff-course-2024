@@ -1,4 +1,4 @@
-package edu.java.domain;
+package edu.java.domain.jdbc;
 
 import edu.java.dto.dbDTO.Chat;
 import java.util.List;

@@ -1,7 +1,7 @@
 package edu.java.services.jdbc;
 
-import edu.java.domain.ChatDAO;
-import edu.java.domain.LinkDAO;
+import edu.java.domain.jdbc.ChatDAO;
+import edu.java.domain.jdbc.LinkDAO;
 import edu.java.dto.dbDTO.Chat;
 import edu.java.dto.dbDTO.Link;
 import edu.java.exceptions.ChatDoesNotExistException;

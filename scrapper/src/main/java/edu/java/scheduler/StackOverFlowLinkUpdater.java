@@ -2,7 +2,7 @@ package edu.java.scheduler;
 
 import edu.java.client.BotClient;
 import edu.java.client.StackOverflowClient;
-import edu.java.domain.LinkDAO;
+import edu.java.domain.jdbc.LinkDAO;
 import edu.java.dto.LinkUpdateRequest;
 import edu.java.dto.StackOverflowUpdate;
 import edu.java.dto.dbDTO.Link;

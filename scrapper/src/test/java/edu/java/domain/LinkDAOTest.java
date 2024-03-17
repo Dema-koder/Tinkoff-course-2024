@@ -1,6 +1,7 @@
 package edu.java.domain;
 
-import edu.java.dto.dbDTO.ChatToLink;
+import edu.java.domain.jdbc.ChatDAO;
+import edu.java.domain.jdbc.LinkDAO;
 import edu.java.dto.dbDTO.Link;
 import edu.java.scrapper.IntegrationTest;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class LinkDAOTest extends IntegrationTest {

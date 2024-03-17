@@ -1,6 +1,6 @@
 package edu.java.services;
 
-import edu.java.domain.LinkDAO;
+import edu.java.domain.jdbc.LinkDAO;
 import edu.java.dto.dbDTO.Link;
 import edu.java.scheduler.GithubLinkUpdater;
 import edu.java.scheduler.StackOverFlowLinkUpdater;

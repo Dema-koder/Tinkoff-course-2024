@@ -1,10 +1,10 @@
 package edu.java.domain;
 
+import edu.java.domain.jdbc.ChatDAO;
 import edu.java.dto.dbDTO.Chat;
 import edu.java.scrapper.IntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
