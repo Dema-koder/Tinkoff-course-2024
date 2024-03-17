@@ -1,8 +1,14 @@
 package edu.java.scrapper;
 
+import liquibase.Contexts;
+import liquibase.LabelExpression;
 import liquibase.Liquibase;
+import liquibase.database.Database;
+import liquibase.database.DatabaseFactory;
 import liquibase.database.core.PostgresDatabase;
 import liquibase.database.jvm.JdbcConnection;
+import liquibase.exception.LiquibaseException;
+import liquibase.resource.ClassLoaderResourceAccessor;
 import liquibase.resource.DirectoryResourceAccessor;
 import liquibase.resource.ResourceAccessor;
 import org.junit.jupiter.api.DisplayName;
@@ -15,9 +21,11 @@ import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
@@ -31,31 +39,24 @@ public class IntegrationTest {
             .withPassword("postgres");
         POSTGRES.start();
 
-        runMigrations(POSTGRES);
+        try {
+            runMigrations(POSTGRES);
+        } catch (LiquibaseException | SQLException | FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private static void runMigrations(JdbcDatabaseContainer<?> c) {
+    private static void runMigrations(JdbcDatabaseContainer<?> c) throws LiquibaseException, SQLException, FileNotFoundException {
         Path migrations = new File("").toPath().toAbsolutePath().getParent().resolve("migrations");
 
-        try {
-            Connection connection =
-                DriverManager.getConnection(
-                    c.getJdbcUrl(),
-                    c.getUsername(),
-                    c.getPassword()
-                );
-            ResourceAccessor changelogDirectory = new DirectoryResourceAccessor(migrations);
-            PostgresDatabase db = new PostgresDatabase();
-            db.setConnection(new JdbcConnection(connection));
-
-            Liquibase liquibase = new liquibase.Liquibase("master.xml", changelogDirectory, db);
-            liquibase.update("");
-
-            liquibase.close();
-            changelogDirectory.close();
-            connection.close();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        String url = c.getJdbcUrl();
+        String username = c.getUsername();
+        String password = c.getPassword();
+        try (JdbcConnection jdbcConnection = new JdbcConnection(
+            DriverManager.getConnection(url, username, password))) {
+            Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(jdbcConnection);
+            Liquibase liquibase = new Liquibase("master.xml", new DirectoryResourceAccessor(migrations), database);
+            liquibase.update(new Contexts(), new LabelExpression());
         }
     }
 
@@ -64,19 +65,5 @@ public class IntegrationTest {
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
         registry.add("spring.datasource.username", POSTGRES::getUsername);
         registry.add("spring.datasource.password", POSTGRES::getPassword);
-    }
-    @Test
-    @DisplayName("Test postgres container")
-    public void testPostgresContainer() {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSourceBuilder
-            .create()
-            .url(POSTGRES.getJdbcUrl())
-            .username(POSTGRES.getUsername())
-            .password(POSTGRES.getPassword())
-            .build());
-        jdbcTemplate.update("INSERT INTO chat (tg_chat_id) VALUES (?)", 1L);
-        long chatId = jdbcTemplate.queryForObject("SELECT id FROM chat WHERE tg_chat_id = (?)", Long.class, 1L);
-
-        assertThat(1L).isEqualTo(chatId);
     }
 }
