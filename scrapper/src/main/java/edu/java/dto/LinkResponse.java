@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record LinkResponse(
     @JsonProperty("id")
-    int id,
+    Long id,
     @JsonProperty("url")
     String url
 ) {
