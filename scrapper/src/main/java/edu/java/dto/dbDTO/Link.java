@@ -16,6 +16,6 @@ public class Link {
     private OffsetDateTime lastCheck;
     private OffsetDateTime lastUpdate;
     private OffsetDateTime lastCommit;
-    private int amountOfIssues;
+    private int answerCount;
     private String type;
 }

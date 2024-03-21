@@ -4,6 +4,6 @@ CREATE TABLE IF NOT EXISTS link (
     last_check TIMESTAMP,
     last_update TIMESTAMP,
     last_commit TIMESTAMP,
-    amount_issues INT DEFAULT -1,
+    answer_count INT DEFAULT -1,
     type varchar(31)
 );

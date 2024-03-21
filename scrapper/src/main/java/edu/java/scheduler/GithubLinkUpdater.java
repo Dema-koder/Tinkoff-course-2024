@@ -25,11 +25,35 @@ public class GithubLinkUpdater implements LinkUpdater {
         String owner = parts[parts.length - 2];
         String repository = parts[parts.length - 1];
         GitHubUpdate gitHubUpdate = gitHubClient.getRepositoryInfo(owner, repository).block();
+        int amount = 0;
+        assert gitHubUpdate != null;
+        amount += checkLastUpdate(link, gitHubUpdate);
+        amount += checkLastCommit(link, gitHubUpdate);
+        return amount;
+    }
+
+    public int checkLastUpdate(Link link, GitHubUpdate gitHubUpdate) {
+        String url = link.getLinkName();
         var listOfChats = linkDAO.findAllChatsByLink(link);
-        if (gitHubUpdate.updatedAt.isAfter(link.getLastUpdate().toInstant().atOffset(ZoneOffset.UTC))) {
-            linkDAO.updateLastUpdate(Timestamp.from(gitHubUpdate.updatedAt.toInstant()), url);
+        var updatedAt = gitHubUpdate.getUpdatedAt();
+        if (updatedAt.isAfter(link.getLastUpdate().toInstant().atOffset(ZoneOffset.UTC))) {
+            linkDAO.updateLastUpdate(Timestamp.from(updatedAt.toInstant()), url);
             LinkUpdateRequest linkUpdateRequest =
                 new LinkUpdateRequest(link.getId(), url, "Обновление в " + url, listOfChats.toArray(new Long[0]));
+            botClient.sendUpdate(linkUpdateRequest);
+            return 1;
+        }
+        return 0;
+    }
+
+    public int checkLastCommit(Link link, GitHubUpdate gitHubUpdate) {
+        String url = link.getLinkName();
+        var listOfChats = linkDAO.findAllChatsByLink(link);
+        var pushedAt = gitHubUpdate.getPushedAt();
+        if (pushedAt.isAfter(link.getLastCommit().toInstant().atOffset(ZoneOffset.UTC))) {
+            linkDAO.updatePushedAt(url, Timestamp.from(pushedAt.toInstant()));
+            LinkUpdateRequest linkUpdateRequest =
+                new LinkUpdateRequest(link.getId(), url, "Новый коммит в " + url, listOfChats.toArray(new Long[0]));
             botClient.sendUpdate(linkUpdateRequest);
             return 1;
         }

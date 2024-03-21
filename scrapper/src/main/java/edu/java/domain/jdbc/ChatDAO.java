@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ChatDAO {
     private final JdbcTemplate jdbcTemplate;
 
-    @Transactional
     public void add(Long tgChatId) {
         if (findById(tgChatId).isEmpty()) {
             jdbcTemplate.update("INSERT INTO chat (tg_chat_id) VALUES (?)", tgChatId);

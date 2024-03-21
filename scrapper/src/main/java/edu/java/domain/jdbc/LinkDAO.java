@@ -18,8 +18,14 @@ public class LinkDAO {
     private final JdbcTemplate jdbcTemplate;
 
     @Transactional
-    public Link addLink(Long chatId, String linkName, Timestamp lastUpdate) {
-        jdbcTemplate.update("INSERT INTO link (link_name, last_update) VALUES (?, ?)", linkName, lastUpdate);
+    public Link addLink(Long chatId, String linkName) {
+        String type;
+        if (linkName.startsWith("https://gitub.com")) {
+            type = "GithubLink";
+        } else {
+            type = "StackOverFlowLink";
+        }
+        jdbcTemplate.update("INSERT INTO link (link_name, type) VALUES (?, ?)", linkName, type);
         Long linkId = findAllLink().getLast().getId();
         jdbcTemplate.update("INSERT INTO chat_to_link (chat_id, link_id) VALUES (?, ?)", chatId, linkId);
         return findAllLinksByTgId(chatId).getLast();
@@ -51,6 +57,7 @@ public class LinkDAO {
         return link;
     }
 
+    @Transactional
     public Optional<Link> findByChatIdAndUrl(Long chatId, String linkName) {
         List<Link> links = jdbcTemplate.query("SELECT DISTINCT * FROM chat_to_link c JOIN link l "
             + "ON c.link_id = l.id WHERE c.chat_id = ?"
@@ -61,12 +68,10 @@ public class LinkDAO {
         return Optional.of(links.getFirst());
     }
 
-    @Transactional
     public List<Link> findAllLink() {
         return jdbcTemplate.query("SELECT * FROM link", new BeanPropertyRowMapper<>(Link.class));
     }
 
-    @Transactional
     public List<ChatToLink> findAllChatLink() {
         return jdbcTemplate.query("SELECT * FROM chat_to_link", new BeanPropertyRowMapper<>(ChatToLink.class));
     }
@@ -89,5 +94,17 @@ public class LinkDAO {
                 + "(SELECT link_id FROM chat_to_link WHERE chat_id = (?))",
             new BeanPropertyRowMapper<>(Link.class), tgChatId
         );
+    }
+
+    public void updateLastCheck(String linkName, Timestamp lastCheck) {
+        jdbcTemplate.update("UPDATE link SET last_check = (?) WHERE link_name = (?)", lastCheck, linkName);
+    }
+
+    public void updatePushedAt(String linkName, Timestamp pushedAt) {
+        jdbcTemplate.update("UPDATE link SET last_commit = (?) WHERE link_name = (?)", pushedAt, linkName);
+    }
+
+    public void updateAnswerCount(String linkName, int amount) {
+        jdbcTemplate.update("UPDATE link answer_count = (?) WHERE link_name = (?)", amount, linkName);
     }
 }

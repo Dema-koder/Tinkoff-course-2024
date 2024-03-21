@@ -7,7 +7,6 @@ import edu.java.exceptions.ChatDoesNotExistException;
 import edu.java.exceptions.WrongParametersException;
 import edu.java.services.LinkService;
 import java.net.URI;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,7 @@ public class JdbcLinkService implements LinkService {
         if (link.isPresent()) {
             throw new WrongParametersException("Ссылку уже есть в базе данных");
         }
-        return linkDAO.addLink(tgChatId, url.toString(), new Timestamp(1L));
+        return linkDAO.addLink(tgChatId, url.toString());
     }
 
     @Override
