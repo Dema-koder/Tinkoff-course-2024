@@ -23,9 +23,9 @@ public class JooqLinkRepository implements LinkRepository {
         Optional<Link> link = findByName(linkName);
         String type;
         if (linkName.startsWith("https://github.com/")) {
-            type = "GitHubLink";
+            type = "GithubLink";
         } else {
-            type = "StackOverflowLink";
+            type = "StackoverflowLink";
         }
         long id = link.map(Link::getId).orElseGet(() -> dslContext.insertInto(Tables.LINK)
                 .set(Tables.LINK.LINK_NAME, linkName)
@@ -79,7 +79,7 @@ public class JooqLinkRepository implements LinkRepository {
                         r.get(Tables.LINK.LAST_CHECK).atOffset(ZoneOffset.UTC),
                         r.get(Tables.LINK.LAST_UPDATE).atOffset(ZoneOffset.UTC),
                         r.get(Tables.LINK.LAST_COMMIT).atOffset(ZoneOffset.UTC),
-                        r.get(Tables.LINK.AMOUNT_ISSUES),
+                        r.get(Tables.LINK.ANSWER_COUNT),
                         r.get(Tables.LINK.TYPE)
                 ));
     }
@@ -94,7 +94,7 @@ public class JooqLinkRepository implements LinkRepository {
                         r.get(Tables.LINK.LAST_CHECK).atOffset(ZoneOffset.UTC),
                         r.get(Tables.LINK.LAST_UPDATE).atOffset(ZoneOffset.UTC),
                         r.get(Tables.LINK.LAST_COMMIT).atOffset(ZoneOffset.UTC),
-                        r.get(Tables.LINK.AMOUNT_ISSUES),
+                        r.get(Tables.LINK.ANSWER_COUNT),
                         r.get(Tables.LINK.TYPE)
                 ));
     }
@@ -115,7 +115,7 @@ public class JooqLinkRepository implements LinkRepository {
                         r.get(Tables.LINK.LAST_CHECK).atOffset(ZoneOffset.UTC),
                         r.get(Tables.LINK.LAST_UPDATE).atOffset(ZoneOffset.UTC),
                         r.get(Tables.LINK.LAST_COMMIT).atOffset(ZoneOffset.UTC),
-                        r.get(Tables.LINK.AMOUNT_ISSUES),
+                        r.get(Tables.LINK.ANSWER_COUNT),
                         r.get(Tables.LINK.TYPE)
                 ));
         if (links.isEmpty()) {
@@ -135,7 +135,7 @@ public class JooqLinkRepository implements LinkRepository {
                         r.get(Tables.LINK.LAST_CHECK).atOffset(ZoneOffset.UTC),
                         r.get(Tables.LINK.LAST_UPDATE).atOffset(ZoneOffset.UTC),
                         r.get(Tables.LINK.LAST_COMMIT).atOffset(ZoneOffset.UTC),
-                        r.get(Tables.LINK.AMOUNT_ISSUES),
+                        r.get(Tables.LINK.ANSWER_COUNT),
                         r.get(Tables.LINK.TYPE)
                 ));
         if (links.isEmpty()) {
@@ -156,7 +156,7 @@ public class JooqLinkRepository implements LinkRepository {
                         r.get(Tables.LINK.LAST_CHECK).atOffset(ZoneOffset.UTC),
                         r.get(Tables.LINK.LAST_UPDATE).atOffset(ZoneOffset.UTC),
                         r.get(Tables.LINK.LAST_COMMIT).atOffset(ZoneOffset.UTC),
-                        r.get(Tables.LINK.AMOUNT_ISSUES),
+                        r.get(Tables.LINK.ANSWER_COUNT),
                         r.get(Tables.LINK.TYPE)
                 ));
         if (links.isEmpty()) {
@@ -188,7 +188,7 @@ public class JooqLinkRepository implements LinkRepository {
     public void updateAmountOfIssues(int amountOfPR, String name) {
         dslContext
                 .update(Tables.LINK)
-                .set(Tables.LINK.AMOUNT_ISSUES, amountOfPR)
+                .set(Tables.LINK.ANSWER_COUNT, amountOfPR)
                 .execute();
     }
 
@@ -216,7 +216,7 @@ public class JooqLinkRepository implements LinkRepository {
                         r.get(Tables.LINK.LAST_CHECK).atOffset(ZoneOffset.UTC),
                         r.get(Tables.LINK.LAST_UPDATE).atOffset(ZoneOffset.UTC),
                         r.get(Tables.LINK.LAST_COMMIT).atOffset(ZoneOffset.UTC),
-                        r.get(Tables.LINK.AMOUNT_ISSUES),
+                        r.get(Tables.LINK.ANSWER_COUNT),
                         r.get(Tables.LINK.TYPE)
                 ));
     }
