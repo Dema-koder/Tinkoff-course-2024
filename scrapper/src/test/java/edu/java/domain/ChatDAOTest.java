@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class JdbcChatDAOTest extends IntegrationTest {
+public class ChatDAOTest extends IntegrationTest {
     private static final JdbcTemplate jdbcTemplate= new JdbcTemplate(DataSourceBuilder
         .create()
         .url(POSTGRES.getJdbcUrl())

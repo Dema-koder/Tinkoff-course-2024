@@ -1,9 +1,13 @@
-CREATE TABLE IF NOT EXISTS link (
-    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    link_name VARCHAR(1000) NOT NULL,
+SET TIME ZONE 'UTC';
+
+CREATE TABLE link
+(
+    link_id BIGINT GENERATED ALWAYS AS IDENTITY,
+    link_name varchar(511),
     last_check TIMESTAMP,
     last_update TIMESTAMP,
     last_commit TIMESTAMP,
-    answer_count INT DEFAULT -1,
-    type varchar(31)
+    amount_issues INT DEFAULT -1,
+    type varchar(31),
+    PRIMARY KEY (link_id)
 );
