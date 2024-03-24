@@ -14,6 +14,8 @@ public class GitHubUpdate {
     public String name;
     @JsonProperty("updated_at")
     public OffsetDateTime updatedAt;
+    @JsonProperty("pushed_at")
+    public OffsetDateTime pushedAt;
 
     @JsonProperty("owner")
     public void setOwner(Map<String, String> owner) {

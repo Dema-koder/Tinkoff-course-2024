@@ -1,7 +1,6 @@
-CREATE TABLE IF NOT EXISTS chat_to_link (
-    chat_id BIGINT,
-    link_id BIGINT,
-    PRIMARY KEY (chat_id, link_id),
-    FOREIGN KEY (chat_id) REFERENCES Chat(id),
-    FOREIGN KEY (link_id) REFERENCES Link(id)
+CREATE TABLE chat_link
+(
+    chat_id BIGINT REFERENCES Chat(id),
+    link_id BIGINT REFERENCES Link(link_id),
+    PRIMARY KEY(chat_id, link_id)
 );

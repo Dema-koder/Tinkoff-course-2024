@@ -20,7 +20,9 @@ public record ApplicationConfig(
     @DefaultValue("https://api.stackexchange.com/2.3")
     String stackoverflow,
     @NotNull
-    Scheduler scheduler
+    Scheduler scheduler,
+    @NotNull
+    String databaseAccessType
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
