@@ -1,8 +1,8 @@
 package edu.java.domain.jpa;
 
+import edu.java.domain.ChatRepository;
 import edu.java.dto.dbDTO.Chat;
 import edu.java.dto.dbDTO.Link;
-import edu.java.domain.ChatRepository;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

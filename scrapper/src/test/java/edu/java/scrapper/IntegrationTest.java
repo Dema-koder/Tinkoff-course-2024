@@ -1,5 +1,7 @@
 package edu.java.scrapper;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import liquibase.Contexts;
 import liquibase.LabelExpression;
 import liquibase.Liquibase;
@@ -11,6 +13,9 @@ import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import liquibase.resource.DirectoryResourceAccessor;
 import liquibase.resource.ResourceAccessor;
+import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -31,6 +36,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Testcontainers
 public class IntegrationTest {
     public static PostgreSQLContainer<?> POSTGRES;
+    public static DSLContext dslContext;
+    public static HikariConfig config;
+    public static HikariDataSource dataSource;
 
     static {
         POSTGRES = new PostgreSQLContainer<>("postgres:16")
@@ -38,7 +46,12 @@ public class IntegrationTest {
             .withUsername("postgres")
             .withPassword("postgres");
         POSTGRES.start();
-
+        config = new HikariConfig();
+        config.setJdbcUrl(POSTGRES.getJdbcUrl());
+        config.setUsername(POSTGRES.getUsername());
+        config.setPassword(POSTGRES.getPassword());
+        dataSource = new HikariDataSource(config);
+        dslContext = DSL.using(dataSource, SQLDialect.POSTGRES);
         try {
             runMigrations(POSTGRES);
         } catch (LiquibaseException | SQLException | FileNotFoundException e) {

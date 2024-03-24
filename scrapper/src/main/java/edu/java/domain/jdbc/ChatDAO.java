@@ -1,46 +1,52 @@
 package edu.java.domain.jdbc;
 
+import edu.java.domain.ChatRepository;
 import edu.java.dto.dbDTO.Chat;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
 @RequiredArgsConstructor
-public class ChatDAO {
+public class ChatDAO implements ChatRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    public void add(Long tgChatId) {
-        if (findById(tgChatId).isEmpty()) {
-            jdbcTemplate.update("INSERT INTO chat (tg_chat_id) VALUES (?)", tgChatId);
+    @Override
+    @Transactional
+    public void add(long id) {
+        jdbcTemplate.update("INSERT INTO chat(id) VALUES (?)", id);
+    }
+
+    @Override
+    @Transactional
+    public int remove(long id) {
+        List<Long> links = jdbcTemplate
+            .queryForList("SELECT link_id FROM chat_link WHERE chat_id = (?)", Long.class, id);
+        jdbcTemplate.update("DELETE FROM chat_link WHERE chat_id = (?)", id);
+        for (Long linkId: links) {
+            List<Long> chatsWithSameLink = jdbcTemplate
+                .queryForList("SELECT chat_id FROM chat_link WHERE link_id = (?)", Long.class, linkId);
+            if (chatsWithSameLink.isEmpty()) {
+                jdbcTemplate.update("DELETE FROM link WHERE link_id = (?)", linkId);
+            }
         }
+        return jdbcTemplate.update("DELETE FROM chat WHERE id = (?)", id);
     }
 
-    @Transactional
-    public void remove(Long tgChatId) {
-        jdbcTemplate.update("DELETE FROM chat_to_link WHERE chat_id = ?", tgChatId);
-        jdbcTemplate.update("DELETE FROM chat WHERE tg_chat_id = ?", tgChatId);
-    }
-
-    @Transactional
-    public Optional<Chat> findById(Long tgChatId) {
-        List<Chat> chats = jdbcTemplate.query(
-            "SELECT * FROM chat WHERE id = ?",
-            new BeanPropertyRowMapper<>(Chat.class),
-            tgChatId
-        );
+    @Override
+    public Optional<Chat> findById(long id) {
+        List<Chat> chats = jdbcTemplate.query("SELECT * FROM chat WHERE id = ?",
+            (resultSet, row) -> new Chat(resultSet.getLong("id")), id);
         if (chats.isEmpty()) {
             return Optional.empty();
         }
         return Optional.of(chats.getFirst());
     }
 
-    @Transactional
+    @Override
     public List<Chat> findAll() {
-        return jdbcTemplate.query("SELECT * FROM chat", new BeanPropertyRowMapper<>(Chat.class));
+        return jdbcTemplate.query("SELECT * FROM chat",
+            (resultSet, row) -> new Chat(resultSet.getLong("id")));
     }
 }
