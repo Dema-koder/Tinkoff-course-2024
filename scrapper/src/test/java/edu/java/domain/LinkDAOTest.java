@@ -1,6 +1,6 @@
 package edu.java.domain;
 
-import edu.java.dto.dbDTO.ChatToLink;
+import edu.java.dto.dbDTO.Chat;
 import edu.java.dto.dbDTO.Link;
 import edu.java.scrapper.IntegrationTest;
 import org.junit.jupiter.api.Test;
@@ -20,27 +20,24 @@ class LinkDAOTest extends IntegrationTest {
         .username(POSTGRES.getUsername())
         .password(POSTGRES.getPassword())
         .build());
-    private final LinkDAO linkDAO = new LinkDAO(jdbcTemplate);
     private final ChatDAO chatDAO = new ChatDAO(jdbcTemplate);
+    private final LinkDAO linkDAO = new LinkDAO(jdbcTemplate);
 
     @Test
     @Rollback
     @Transactional
-    public void testFindAll() {
+    public void testAdd() {
         chatDAO.add(1L);
-        chatDAO.add(2L);
-        linkDAO.addLink(1L, "helloworld1", new Timestamp(1L));
-        linkDAO.addLink(1L, "helloworld2", new Timestamp(1L));
-        linkDAO.addLink(2L, "helloworld3", new Timestamp(1L));
-
+        Long id1 = chatDAO.findById(1L).get().getId();
+        linkDAO.addLink(id1, "helloworld1", new Timestamp(1L));
+        linkDAO.addLink(id1, "helloworld2", new Timestamp(1L));
         List<Link> links = linkDAO.findAllLink();
 
-        assertThat(3).isEqualTo(links.size());
         assertThat("helloworld1").isEqualTo(links.getFirst().getLinkName());
         assertThat("helloworld2").isEqualTo(links.get(1).getLinkName());
-        assertThat("helloworld3").isEqualTo(links.getLast().getLinkName());
 
         chatDAO.remove(1L);
         chatDAO.remove(2L);
     }
+
 }

@@ -19,13 +19,37 @@ public class LinkDAO {
 
     @Transactional
     public Link addLink(Long chatId, String linkName, Timestamp lastUpdate) {
-        jdbcTemplate.update("INSERT INTO link (link_name, last_update) VALUES (?, ?)", linkName, lastUpdate);
-        Long linkId = findAllLink().getLast().getId();
-        jdbcTemplate.update("INSERT INTO chat_to_link (chat_id, link_id) VALUES (?, ?)", chatId, linkId);
-        return findAllLinksByTgId(chatId).getLast();
+        Optional<Link> link = findByName(linkName);
+        long id;
+        if (link.isEmpty()) {
+            jdbcTemplate.update("INSERT INTO link(link_name, last_update) VALUES (?, ?)",
+                linkName, lastUpdate);
+            id = findAllLink().getLast().getId();
+        } else {
+            id = link.get().getId();
+        }
+        jdbcTemplate.update("INSERT INTO chat_to_link(chat_id, link_id) VALUES (?, ?)", chatId, id);
+        return findById(id).get();
     }
 
-    @Transactional
+    public Optional<Link> findById(long linkId) {
+        List<Link> links = jdbcTemplate.query("SELECT * FROM link WHERE id = ?",
+            new BeanPropertyRowMapper<>(Link.class), linkId);
+        if (links.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(links.getFirst());
+    }
+
+    private Optional<Link> findByName(String linkName) {
+        List<Link> links = jdbcTemplate.query("SELECT * FROM link WHERE link_name = ?",
+            new BeanPropertyRowMapper<>(Link.class), linkName);
+        if (links.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(links.getFirst());
+    }
+
     public Optional<Long> getIdByLinkName(String linkName) {
         var list = jdbcTemplate.query("SELECT id FROM link WHERE link_name = ?",
             (resultSet, row) -> resultSet.getLong("id"),
@@ -61,12 +85,10 @@ public class LinkDAO {
         return Optional.of(links.getFirst());
     }
 
-    @Transactional
     public List<Link> findAllLink() {
         return jdbcTemplate.query("SELECT * FROM link", new BeanPropertyRowMapper<>(Link.class));
     }
 
-    @Transactional
     public List<ChatToLink> findAllChatLink() {
         return jdbcTemplate.query("SELECT * FROM chat_to_link", new BeanPropertyRowMapper<>(ChatToLink.class));
     }
@@ -75,7 +97,6 @@ public class LinkDAO {
         jdbcTemplate.update("UPDATE link SET last_update = (?) WHERE link_name = (?)", update, name);
     }
 
-    @Transactional
     public List<Long> findAllChatsByLink(Link link) {
         return jdbcTemplate.query("SELECT DISTINCT c.chat_id FROM chat_to_link c "
                 + "JOIN link l ON l.id = c.link_id WHERE l.link_name = (?)",
@@ -83,7 +104,6 @@ public class LinkDAO {
         );
     }
 
-    @Transactional
     public List<Link> findAllLinksByTgId(Long tgChatId) {
         return jdbcTemplate.query("SELECT * FROM link WHERE id IN"
                 + "(SELECT link_id FROM chat_to_link WHERE chat_id = (?))",
